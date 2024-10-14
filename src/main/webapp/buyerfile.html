@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Buyer Registration - Revature Shop</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .header-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(60%); /* Darkens the image for contrast */
+        }
+
+        .header-container h1 {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 40px;
+            font-family: Arial, sans-serif;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+        }
+
+        .form-container {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            width: 350px;
+            text-align: center;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        input {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: #007BFF;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25); /* Glow effect */
+        }
+
+        .button {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .login-button {
+            background-color: #28A745;
+        }
+
+        .login-button:hover {
+            background-color: #218838;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Buyer Registration</h1>
+        <img src="https://tse2.mm.bing.net/th?id=OIG1.adV2tJyy27mJ4JUur0CM&pid=ImgGn" alt="Revature Shop">
+        <div class="form-container">
+            <h2>Create Your Account</h2>
+            <form action="buyer" method="POST">
+                <input type="text" name="name" placeholder="Enter your name" required>
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <div class="button-container">
+                    <button type="submit" class="button">Register</button>
+                    <button type="button" class="button login-button" onclick="window.location.href='login.html'">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

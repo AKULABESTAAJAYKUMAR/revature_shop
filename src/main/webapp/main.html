@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revature Shop</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8; /* Light background for contrast */
+            display: flex;
+            flex-direction: column; /* Align items vertically */
+            height: 100vh; /* Full height of the viewport */
+        }
+
+        .header {
+            background-color: #333; /* Header color */
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .nav a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .banner {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 160px); /* Height minus header and footer */
+            overflow: hidden;
+        }
+
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cover the area fully */
+            position: absolute; /* Position absolutely to cover the banner */
+            top: 0;
+            left: 0;
+        }
+
+        .banner .promo {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 20px; /* Increase font size for visibility */
+        }
+
+        footer {
+            background-color: #333; /* Same color as the header */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 20px; /* Smaller font size for mobile */
+            }
+
+            .nav a {
+                font-size: 14px; /* Smaller nav links */
+                padding: 6px 10px; /* Reduced padding */
+            }
+
+            .banner .promo {
+                font-size: 18px; /* Smaller promo font */
+                padding: 8px 15px; /* Reduced padding */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 18px; /* Even smaller font for very small screens */
+            }
+
+            .nav {
+                flex-direction: column; /* Stack navigation links */
+            }
+
+            .banner .promo {
+                font-size: 16px; /* Further reduce promo font */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Revature Shop</h1>
+        <div class="nav">
+            <a href="buyerfile.html">Buyer</a>
+            <a href="seller.html">Seller</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+    
+    <div class="banner">
+        <img src="https://img.freepik.com/free-photo/shopping-bag-cart_23-2148879372.jpg" alt="Banner Image">
+        <div class="promo">Welcome to Revature Shop! Shop the best products here!</div>
+    </div>
+
+    <footer>
+        <p>Revature Marketplace © 2024 - All Rights Reserved</p>
+    </footer>
+</body>
+</html>

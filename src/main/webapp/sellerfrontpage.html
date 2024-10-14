@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #productForm {
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: white;
+            margin: 0 auto;
+            max-width: 400px;
+        }
+
+        #productForm input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #productForm button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        #productForm button:hover {
+            background-color: #45a049;
+        }
+
+        #productList {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+            max-width: 600px; /* Limit max width of the product list */
+            margin: 20px auto; /* Center the product list */
+        }
+
+        #productList li {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Added shadow for depth */
+        }
+
+        #productList img {
+            width: 50px;
+            height: auto;
+            margin-top: 10px; /* Space above the image */
+        }
+
+        #productList button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 5px; /* Space above buttons */
+            width: 100%; /* Full width for remove button */
+        }
+
+        #productList button:hover {
+            background-color: #d32f2f;
+        }
+
+        .edit-button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%; /* Full width for edit button */
+            margin-bottom: 5px; /* Space below edit button */
+        }
+
+        .edit-button:hover {
+            background-color: #1976D2;
+        }
+
+        .product-description {
+            margin: 5px 0; 
+            font-size: 14px; 
+            color: #555; 
+            text-align: center; /* Center align description */
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Products</h1>
+
+    <form id="productForm">
+        <input type="text" id="productName" placeholder="Product Name" required>
+        <input type="number" id="productPrice" placeholder="Product Price" required min="0" step="0.01">
+        <input type="text" id="productImage" placeholder="Product Image URL" required>
+        <input type="text" id="productDescription" placeholder="Product Description" required>
+        <button type="submit">Add Product</button>
+        
+
+    </form>
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick="window.location.href='r.html';" style="background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer;">See Reviews</button>
+    </div>
+    <ul id="productList"></ul>
+
+    <script>
+        // Initialize products array from localStorage or as empty
+        let products = JSON.parse(localStorage.getItem('products')) || [];
+        let editingIndex = null;
+
+        // Function to render the products on the page
+        function renderProducts() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = ''; // Clear existing list
+            products.forEach((product, index) => {
+                const productItem = document.createElement('li');
+                productItem.innerHTML = `
+                    <strong>${product.name}</strong> - ₹${product.price.toFixed(2)}
+                    <p class="product-description">${product.description}</p>
+                    <img src="${product.image}" alt="${product.name}">
+                    <button class="edit-button" onclick="editProduct(${index})">Edit</button>
+                    <button onclick="removeProduct(${index})">Remove</button>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Event listener for the product form submission
+        document.getElementById('productForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const productName = document.getElementById('productName').value;
+            const productPrice = parseFloat(document.getElementById('productPrice').value);
+            const productImage = document.getElementById('productImage').value;
+            const productDescription = document.getElementById('productDescription').value;
+
+            const productData = { name: productName, price: productPrice, image: productImage, description: productDescription };
+
+            // If editing an existing product, update it; otherwise, add a new product
+            if (editingIndex !== null) {
+                products[editingIndex] = productData;
+                editingIndex = null; // Reset editing index
+            } else {
+                products.push(productData);
+            }
+
+            // Store the updated products array in localStorage
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProducts(); // Render updated product list
+            this.reset(); // Reset the form fields
+        });
+
+        // Function to remove a product from the list
+        function removeProduct(index) {
+            products.splice(index, 1); // Remove product at index
+            localStorage.setItem('products', JSON.stringify(products)); // Update localStorage
+            renderProducts(); // Re-render product list
+        }
+
+        // Function to populate form fields for editing a product
+        function editProduct(index) {
+            const product = products[index];
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productImage').value = product.image;
+            document.getElementById('productDescription').value = product.description;
+
+            editingIndex = index; // Set editing index
+        }
+
+        renderProducts(); // Initial render of products
+    </script>
+</body>
+</html>

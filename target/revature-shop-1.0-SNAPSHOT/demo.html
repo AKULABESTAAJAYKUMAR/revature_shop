@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Revature Shop</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .header-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* 100% of the viewport height */
+        }
+
+        .header-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the image covers the entire area */
+        }
+
+        .header-container h1 {
+            position: absolute;
+            top: 45%; /* Adjusted upwards */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 36px;
+            font-family: Arial, sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .button-container {
+            position: absolute;
+            top: 55%; /* Adjusted upwards */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex; /* Use flexbox for horizontal layout */
+            gap: 20px; /* Space between buttons */
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-family: Arial, sans-serif;
+            color: white;
+            background-color: #007BFF; /* Blue background */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth transition */
+            text-decoration: none; /* Remove underline */
+            display: inline-block; /* Allow padding */
+        }
+
+        .button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>Welcome to Revature Shop</h1>
+        <img src="https://tse2.mm.bing.net/th?id=OIG1.adV2tJyy27mJ4JUur0CM&pid=ImgGn" alt="Background Image">
+        <div class="button-container">
+            <!-- Link the Buyer button to the buyer.html page -->
+            <a href="buyer.html" class="button">Buyer</a>
+            <!-- Link the Seller button to the seller.html page -->
+            <a href="seller.html" class="button">Seller</a>
+        </div>
+    </div>
+</body>
+</html>

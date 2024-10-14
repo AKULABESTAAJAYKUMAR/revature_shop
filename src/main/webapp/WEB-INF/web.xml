@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          xmlns="https://jakarta.ee/xml/ns/jakartaee" 
+          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" 
+          id="WebApp_ID" version="5.0">
+  
+  <display-name>revshop</display-name>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+  </welcome-file-list>
+
+  <!-- Servlet for Buyer Registration -->
+
+<servlet>
+    <servlet-name>BuyerServlet</servlet-name>
+    <servlet-class>com.pack2.buyerRegistration</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>BuyerServlet</servlet-name>
+    <url-pattern>/buyer</url-pattern>
+</servlet-mapping>
+
+ <!-- Servlet for Buyer Registration -->
+ 
+ 
+<!-- Servlet for login Registration -->
+     <servlet>  
+    <servlet-name>test4</servlet-name>
+    <servlet-class>com.pack2.LoginServletForBuyer</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>test4</servlet-name>
+    <url-pattern>/loginServlet</url-pattern>
+  </servlet-mapping>
+    <!-- Servlet for address Registration -->
+     
+            <servlet>  
+    <servlet-name>test6</servlet-name>
+    <servlet-class>com.pack2.address</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>test6</servlet-name>
+    <url-pattern>/buyServlet</url-pattern>
+  </servlet-mapping>
+      
+ <!-- Servlet for address Registration -->
+ 
+  
+    <!-- Servlet for remove Registration --> 
+  
+ <servlet>
+    <servlet-name>RemoveProductServlet1</servlet-name>
+    <servlet-class>com.pack2.RemoveProductServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>RemoveProductServlet1</servlet-name>
+    <url-pattern>/RemoveProductServlet</url-pattern>
+</servlet-mapping>
+ 
+ <!-- Servlet for remove product -->
+  
+  
+ 
+ 
+  <!-- Servlet for seller Registration -->
+ 
+     <servlet>  
+    <servlet-name>test3</servlet-name>
+    <servlet-class>com.pack2.sellerRegistration</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>test3</servlet-name>
+    <url-pattern>/seller</url-pattern>
+  </servlet-mapping>
+  
+   <!-- Servlet for seller Registration -->
+   
+   
+ <!-- Servlet for seller login --> 
+       <servlet>  
+    <servlet-name>test5</servlet-name>
+    <servlet-class>com.pack2.LoginServletForsellers</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>test5</servlet-name>
+    <url-pattern>/Sellerlogin</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!-- Servlet for seller login -->
+
+  
+  
+
+ <servlet>
+        <servlet-name>SaveAddressServlet</servlet-name>
+        <servlet-class>com.pack2.SaveAddressServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SaveAddressServlet</servlet-name>
+        <url-pattern>/saveAddressServlet</url-pattern>
+    </servlet-mapping>
+  
+<servlet>
+    <servlet-name>PaymentServlet</servlet-name>
+    <servlet-class>com.pack2.PaymentServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>PaymentServlet</servlet-name>
+    <url-pattern>/paymentServlet</url-pattern>
+</servlet-mapping>
+
+ <servlet>
+        <servlet-name>CartServlet</servlet-name>
+        <servlet-class>com.pack2.CartServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>CartServlet</servlet-name>
+        <url-pattern>/cartServlet</url-pattern>
+    </servlet-mapping>
+
+
+  <servlet>
+        <servlet-name>ReviewServlet</servlet-name>
+        <servlet-class>com.pack2.ReviewServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ReviewServlet</servlet-name>
+        <url-pattern>/ReviewServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FetchReviewsServlet</servlet-name>
+        <servlet-class>com.pack2.FetchReviewsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FetchReviewsServlet</servlet-name>
+        <url-pattern>/FetchReviewsServlet</url-pattern>
+    </servlet-mapping>
+ 
+  
+
+
+  
+  
+  
+  
+</web-app>

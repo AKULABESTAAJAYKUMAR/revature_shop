@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List - Revature Shop</title>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<style>
+    body, h1, h3, p {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        text-align: center; 
+        background-color: #f7f9fc; 
+        padding: 20px; 
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 2em;
+        color: #333; 
+    }
+
+    .search-container {
+        margin-bottom: 20px; 
+    }
+
+    .search-bar {
+        padding: 10px;
+        font-size: 16px;
+        width: 250px; 
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; 
+    }
+
+    #productList {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center; 
+        padding: 0; 
+        list-style-type: none; 
+    }
+
+    .product-item {
+        border: 1px solid #ddd; 
+        border-radius: 10px; 
+        padding: 15px; 
+        margin: 15px; 
+        width: 220px; 
+        text-align: center;
+        background-color: #fff; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        transition: transform 0.2s; 
+    }
+
+    .product-item:hover {
+        transform: scale(1.03); 
+    }
+
+    .product-item img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px; 
+    }
+
+    .product-item h3 {
+        font-size: 18px;
+        color: #333; 
+        margin: 10px 0; 
+    }
+
+    .product-item p {
+        color: #555; 
+        margin: 5px 0; 
+    }
+
+    .button-container {
+        display: flex; /* Use flexbox for layout */
+        justify-content: center; /* Center the buttons */
+        gap: 10px; /* Space between buttons */
+        margin-top: 10px; /* Space above buttons */
+    }
+
+    .button {
+        padding: 10px 20px; 
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #007BFF; 
+        color: white;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s; 
+    }
+
+    .button:hover {
+        background-color: #0056b3; 
+    }
+
+    .cart-button {
+        background-color: #28a745; 
+    }
+
+    .cart-button:hover {
+        background-color: #218838; 
+    }
+
+    .review-button {
+        background-color: #ffc107; /* Yellow for the review button */
+    }
+
+    .review-button:hover {
+        background-color: #e0a800; /* Darker yellow on hover */
+    }
+
+    .hidden {
+        display: none; 
+    }
+
+    .favorite-icon {
+        cursor: pointer;
+        font-size: 24px; /* Adjust size as needed */
+    }
+
+    .favorite-icon.favorited {
+        color: red; /* Change to full red when favorited */
+        transition: color 0.3s ease; /* Smooth transition effect */
+    }
+</style>
+
+
+</head>
+<body>
+    <h1>Welcome To Revature Shop</h1>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search for products..." onkeyup="filterProducts()">
+    </div>
+    
+<div class="product-container" id="productContainer">
+    <div class="product-item">
+        <img src="https://tse2.mm.bing.net/th?id=OIG3.nJ9J.5.aKNZIFMzpL9RJ&pid=ImgGn" alt="Product Image">
+        <h3>Oppo A79</h3>
+        <p>Price: ₹29999</p>
+        <p class="product-description">The Oppo A79 features a 6.43-inch AMOLED display, a powerful processor, and a 48MP dual-camera system for stunning photography.</p>
+
+        <!-- Favorite Icon -->
+        <span class="favorite-icon" onclick="toggleFavorite(this, 100, 'Oppo A79', 29999, 'https://tse2.mm.bing.net/th?id=OIG3.nJ9J.5.aKNZIFMzpL9RJ&pid=ImgGn')">
+            <i class="bi bi-heart"></i>
+        </span>
+
+        <div class="button-container">
+            <button class="button" type="button" onclick="storeProductId(100)">Buy Now</button>
+            <form action="cartServlet" method="POST" class="add-to-cart-form">
+                <input type="hidden" name="product_id" value="100">
+                <input type="hidden" name="product_name" value="Oppo A79">
+                <input type="hidden" name="product_price" value="29999">
+                <input type="hidden" name="product_image" value="https://tse2.mm.bing.net/th?id=OIG3.nJ9J.5.aKNZIFMzpL9RJ&pid=ImgGn">
+                <button class="button cart-button" type="submit">Add to Cart</button>
+            </form>
+            <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+        </div>
+    </div>
+
+
+<script>
+    function toggleFavorite(element, productId, productName, productPrice, productImage) {
+        element.classList.toggle("favorited"); // Toggle the favorited class
+        const heartIcon = element.querySelector('i'); // Get the heart icon
+
+        // Change the icon based on whether it is favorited
+        if (element.classList.contains("favorited")) {
+            heartIcon.classList.remove("bi-heart");
+            heartIcon.classList.add("bi-heart-fill");
+
+            // Save product details in localStorage
+            const favoriteProducts = JSON.parse(localStorage.getItem('favoriteProducts')) || [];
+            const product = { productId, productName, productPrice, productImage };
+            favoriteProducts.push(product);
+            localStorage.setItem('favoriteProducts', JSON.stringify(favoriteProducts));
+        } else {
+            heartIcon.classList.remove("bi-heart-fill");
+            heartIcon.classList.add("bi-heart");
+
+            // Remove product from localStorage
+            let favoriteProducts = JSON.parse(localStorage.getItem('favoriteProducts')) || [];
+            favoriteProducts = favoriteProducts.filter(p => p.productId !== productId);
+            localStorage.setItem('favoriteProducts', JSON.stringify(favoriteProducts));
+        }
+
+        // Redirect to favourite.html
+        window.location.href = 'favourite.html';
+    }
+</script>
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG1.9jWSRDpilVYg14MGfYTr&pid=ImgGn" alt="Product Image">
+    <h3>Fridge</h3>
+    <p>Price: ₹9999</p>
+    <p class="product-description">This LG Double Door Fridge comes with a 260L capacity, frost-free technology, and energy-efficient cooling to keep your food fresh longer.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 2, 'Fridge', 9999, 'https://tse1.mm.bing.net/th?id=OIG1.9jWSRDpilVYg14MGfYTr&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(2)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="2">
+            <input type="hidden" name="product_name" value="Fridge">
+            <input type="hidden" name="product_price" value="9999">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG1.9jWSRDpilVYg14MGfYTr&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+<div class="product-item">
+    <img src="https://tse3.mm.bing.net/th?id=OIG1.VvMPIsTJXv1jGmTFNKul&pid=ImgGn" alt="Product Image">
+    <h3>Sofa Set</h3>
+    <p>Price: ₹4999</p>
+    <p class="product-description">This elegant 5-seater sofa set features premium upholstery, sturdy wooden legs, and plush cushioning, perfect for enhancing your living room's comfort and style.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 3, 'Sofa Set', 4999, 'https://tse3.mm.bing.net/th?id=OIG1.VvMPIsTJXv1jGmTFNKul&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(3)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="3">
+            <input type="hidden" name="product_name" value="Sofa Set">
+            <input type="hidden" name="product_price" value="4999">
+            <input type="hidden" name="product_image" value="https://tse3.mm.bing.net/th?id=OIG1.VvMPIsTJXv1jGmTFNKul&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse3.mm.bing.net/th?id=OIG4.m3VDoaUxcqRRFvq3Yc80&pid=ImgGn" alt="Product Image">
+    <h3>Washing Machine</h3>
+    <p>Price: ₹999</p>
+    <p class="product-description">This fully automatic washing machine offers a 7kg capacity, multiple wash programs, and energy-efficient performance to give your clothes the best care.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 4, 'Washing Machine', 999, 'https://tse3.mm.bing.net/th?id=OIG4.m3VDoaUxcqRRFvq3Yc80&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(4)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="4">
+            <input type="hidden" name="product_name" value="Washing Machine">
+            <input type="hidden" name="product_price" value="999">
+            <input type="hidden" name="product_image" value="https://tse3.mm.bing.net/th?id=OIG4.m3VDoaUxcqRRFvq3Yc80&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse2.mm.bing.net/th?id=OIG2.5caAyGY.dpcDZNFJiX5B&pid=ImgGn" alt="Product Image">
+    <h3>Bluetooth Speaker</h3>
+    <p>Price: ₹99</p>
+    <p class="product-description">This portable Bluetooth speaker delivers crystal-clear sound, deep bass, and a long-lasting battery, perfect for music on the go.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 5, 'Bluetooth Speaker', 99, 'https://tse2.mm.bing.net/th?id=OIG2.5caAyGY.dpcDZNFJiX5B&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(5)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="5">
+            <input type="hidden" name="product_name" value="Bluetooth Speaker">
+            <input type="hidden" name="product_price" value="99">
+            <input type="hidden" name="product_image" value="https://tse2.mm.bing.net/th?id=OIG2.5caAyGY.dpcDZNFJiX5B&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse3.mm.bing.net/th?id=OIG4.Z_.KPLAWIJwWGLQEpk9e&pid=ImgGn" alt="Product Image">
+    <h3>Book</h3>
+    <p>Price: ₹29</p>
+    <p class="product-description">This captivating novel takes readers on a journey through suspense, emotion, and unforgettable storytelling, perfect for book lovers of all ages.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 6, 'Book', 29, 'https://tse3.mm.bing.net/th?id=OIG4.Z_.KPLAWIJwWGLQEpk9e&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(6)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="6">
+            <input type="hidden" name="product_name" value="Book">
+            <input type="hidden" name="product_price" value="29">
+            <input type="hidden" name="product_image" value="https://tse3.mm.bing.net/th?id=OIG4.Z_.KPLAWIJwWGLQEpk9e&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG2.p59LKa0tkLTkoXjXCc4t&pid=ImgGn" alt="Product Image">
+    <h3>Pen</h3>
+    <p>Price: ₹99</p>
+    <p class="product-description">This sleek, smooth-writing pen offers a comfortable grip and premium ink flow, making it ideal for everyday use and note-taking.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 7, 'Pen', 99, 'https://tse1.mm.bing.net/th?id=OIG2.p59LKa0tkLTkoXjXCc4t&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(7)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="7">
+            <input type="hidden" name="product_name" value="Pen">
+            <input type="hidden" name="product_price" value="99">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG2.p59LKa0tkLTkoXjXCc4t&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG4.i_Ax2dwSVTIM2J6KQOTI&pid=ImgGn" alt="Product Image">
+    <h3>Bag</h3>
+    <p>Price: ₹299</p>
+    <p class="product-description">This stylish and durable bag features multiple compartments, making it perfect for daily use, travel, or school, while combining functionality with fashion.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 8, 'Bag', 299, 'https://tse1.mm.bing.net/th?id=OIG4.i_Ax2dwSVTIM2J6KQOTI&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(8)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="8">
+            <input type="hidden" name="product_name" value="Bag">
+            <input type="hidden" name="product_price" value="299">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG4.i_Ax2dwSVTIM2J6KQOTI&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG4.DjuywDz1YySKpid4WUQw&pid=ImgGn" alt="Product Image">
+    <h3>Shirt</h3>
+    <p>Price: ₹899</p>
+    <p class="product-description">This comfortable and stylish shirt is made from breathable fabric, featuring a classic fit and versatile design, perfect for both casual and formal occasions.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 9, 'Shirt', 899, 'https://tse1.mm.bing.net/th?id=OIG4.DjuywDz1YySKpid4WUQw&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(9)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="9">
+            <input type="hidden" name="product_name" value="Shirt">
+            <input type="hidden" name="product_price" value="899">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG4.DjuywDz1YySKpid4WUQw&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG2.VtJb7n0Qr.qq6qr8P5ML&pid=ImgGn" alt="Product Image">
+    <h3>Pant</h3>
+    <p>Price: ₹699</p>
+    <p class="product-description">These versatile pants are crafted from high-quality fabric, offering a perfect blend of comfort and style, suitable for both casual outings and formal events.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 10, 'Pant', 699, 'https://tse1.mm.bing.net/th?id=OIG2.VtJb7n0Qr.qq6qr8P5ML&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(10)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="10">
+            <input type="hidden" name="product_name" value="Pant">
+            <input type="hidden" name="product_price" value="699">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG2.VtJb7n0Qr.qq6qr8P5ML&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+     <div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG1.7GazcQ3r6OTfbiDHGKdY&pid=ImgGn" alt="Product Image">
+    <h3>PC</h3>
+    <p>Price: ₹999,999</p>
+    <p class="product-description">This high-performance PC is equipped with the latest processor and ample RAM, making it perfect for gaming, graphic design, and everyday multitasking.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 12, 'PC', 999999, 'https://tse4.mm.bing.net/th?id=OIG1.7GazcQ3r6OTfbiDHGKdY&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(12)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="100">
+            <input type="hidden" name="product_name" value="PC">
+            <input type="hidden" name="product_price" value="999999">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG1.7GazcQ3r6OTfbiDHGKdY&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG3.5L2psodoVOVW_kWem4IQ&pid=ImgGn" alt="Product Image">
+    <h3>Charger</h3>
+    <p>Price: ₹789</p>
+    <p class="product-description">This fast-charging charger is compatible with a variety of devices, featuring a compact design and durable construction for efficient and reliable power delivery.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 13, 'Charger', 789, 'https://tse4.mm.bing.net/th?id=OIG3.5L2psodoVOVW_kWem4IQ&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(13)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="1010">
+            <input type="hidden" name="product_name" value="Charger">
+            <input type="hidden" name="product_price" value="789">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG3.5L2psodoVOVW_kWem4IQ&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG1.aMNLZQDCuSmdTmwJztwZ&pid=ImgGn" alt="Product Image">
+    <h3>Laptop</h3>
+    <p>Price: ₹99,999</p>
+    <p class="product-description">This lightweight laptop boasts a powerful processor, long battery life, and stunning display, making it perfect for work, study, and entertainment on the go.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 12, 'Laptop', 99999, 'https://tse1.mm.bing.net/th?id=OIG1.aMNLZQDCuSmdTmwJztwZ&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(12)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="12">
+            <input type="hidden" name="product_name" value="Laptop">
+            <input type="hidden" name="product_price" value="99999">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG1.aMNLZQDCuSmdTmwJztwZ&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG4..1Llv8BCrkxe66iJugfX&pid=ImgGn" alt="Product Image">
+    <h3>Water Bottle</h3>
+    <p>Price: ₹21</p>
+    <p class="product-description">This eco-friendly water bottle is made from stainless steel, features double-wall insulation to keep drinks cold or hot, and comes with a leak-proof lid for on-the-go convenience.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 13, 'Water Bottle', 21, 'https://tse4.mm.bing.net/th?id=OIG4..1Llv8BCrkxe66iJugfX&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(13)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="13">
+            <input type="hidden" name="product_name" value="Water Bottle">
+            <input type="hidden" name="product_price" value="21">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG4..1Llv8BCrkxe66iJugfX&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+<div class="product-item">
+    <img src="https://tse2.mm.bing.net/th?id=OIG2.eWr.ykzIrhKoJFpJN4NO&pid=ImgGn" alt="Product Image">
+    <h3>School Bag</h3>
+    <p>Price: ₹899</p>
+    <p class="product-description">This spacious school bag features multiple compartments for organized storage, padded shoulder straps for comfort, and a durable design, perfect for carrying books and supplies to school.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 14, 'School Bag', 899, 'https://tse2.mm.bing.net/th?id=OIG2.eWr.ykzIrhKoJFpJN4NO&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(14)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="14">
+            <input type="hidden" name="product_name" value="School Bag">
+            <input type="hidden" name="product_price" value="899">
+            <input type="hidden" name="product_image" value="https://tse2.mm.bing.net/th?id=OIG2.eWr.ykzIrhKoJFpJN4NO&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG3.sySGAUtQzJz7B8xH_eE6&pid=ImgGn" alt="Product Image">
+    <h3>Juice</h3>
+    <p>Price: ₹19</p>
+    <p class="product-description">This refreshing juice is made from 100% natural fruits, packed with essential vitamins and nutrients, offering a delicious and healthy drink for any time of the day.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 15, 'Juice', 19, 'https://tse4.mm.bing.net/th?id=OIG3.sySGAUtQzJz7B8xH_eE6&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(15)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="15">
+            <input type="hidden" name="product_name" value="Juice">
+            <input type="hidden" name="product_price" value="19">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG3.sySGAUtQzJz7B8xH_eE6&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+<div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG4.PE0GTRbsg30SiPqQuIs5&pid=ImgGn" alt="Product Image">
+    <h3>Watch</h3>
+    <p>Price: ₹3999</p>
+    <p class="product-description">This elegant watch features a sleek design with a stainless steel case, precise quartz movement, and a stylish strap, making it the perfect accessory for any occasion.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 16, 'Watch', 3999, 'https://tse4.mm.bing.net/th?id=OIG4.PE0GTRbsg30SiPqQuIs5&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(16)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="16">
+            <input type="hidden" name="product_name" value="Watch">
+            <input type="hidden" name="product_price" value="3999">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG4.PE0GTRbsg30SiPqQuIs5&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<div class="product-item">
+    <img src="https://tse4.mm.bing.net/th?id=OIG2.Z1o_sDbIgGAT7CCuT8bx&pid=ImgGn" alt="Product Image">
+    <h3>Bullet Bike</h3>
+    <p>Price: ₹999999</p>
+    <p class="product-description">This iconic bullet bike combines classic design with modern engineering, offering powerful performance, superior handling, and a thrilling riding experience on any terrain.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 17, 'Bullet Bike', 999999, 'https://tse4.mm.bing.net/th?id=OIG2.Z1o_sDbIgGAT7CCuT8bx&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(17)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="17">
+            <input type="hidden" name="product_name" value="Bullet Bike">
+            <input type="hidden" name="product_price" value="999999">
+            <input type="hidden" name="product_image" value="https://tse4.mm.bing.net/th?id=OIG2.Z1o_sDbIgGAT7CCuT8bx&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+<script>
+    function toggleFavorite(element, id, name, price, image) {
+        // Create product object with details
+        const favoriteProduct = {
+            id: id,
+            name: name,
+            price: price,
+            image: image
+        };
+
+        // Store product details in localStorage
+        localStorage.setItem('favoriteProduct', JSON.stringify(favoriteProduct));
+
+        // Redirect to favorites page
+        window.location.href = 'favourite.html';
+    }
+</script>
+
+<div class="product-item">
+    <img src="https://tse1.mm.bing.net/th?id=OIG1.Ca_mJk0UuGi9RiMqA2qm&pid=ImgGn" alt="Product Image">
+    <h3>Power Bank</h3>
+    <p>Price: ₹499</p>
+    <p class="product-description">This compact power bank features high-capacity charging, multiple output ports, and fast charging technology, ensuring your devices stay powered on the go.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 19, 'Power Bank', 499, 'https://tse1.mm.bing.net/th?id=OIG1.Ca_mJk0UuGi9RiMqA2qm&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(19)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="19">
+            <input type="hidden" name="product_name" value="Power Bank">
+            <input type="hidden" name="product_price" value="499">
+            <input type="hidden" name="product_image" value="https://tse1.mm.bing.net/th?id=OIG1.Ca_mJk0UuGi9RiMqA2qm&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+<div class="product-item">
+    <img src="https://tse3.mm.bing.net/th?id=OIG1.5fTunGvNwYIjtZdpuhSb&pid=ImgGn" alt="Product Image">
+    <h3>Torch Light</h3>
+    <p>Price: ₹789</p>
+    <p class="product-description">This durable torch light offers powerful LED illumination, multiple brightness settings, and a long-lasting battery, making it perfect for outdoor adventures and emergencies.</p>
+
+    <!-- Favorite Icon -->
+    <span class="favorite-icon" onclick="toggleFavorite(this, 20, 'Torch Light', 789, 'https://tse3.mm.bing.net/th?id=OIG1.5fTunGvNwYIjtZdpuhSb&pid=ImgGn')">
+        <i class="bi bi-heart"></i>
+    </span>
+
+    <div class="button-container">
+        <button class="button" type="button" onclick="storeProductId(20)">Buy Now</button>
+        <form action="cartServlet" method="POST" class="add-to-cart-form">
+            <input type="hidden" name="product_id" value="20">
+            <input type="hidden" name="product_name" value="Torch Light">
+            <input type="hidden" name="product_price" value="789">
+            <input type="hidden" name="product_image" value="https://tse3.mm.bing.net/th?id=OIG1.5fTunGvNwYIjtZdpuhSb&pid=ImgGn">
+            <button class="button cart-button" type="submit">Add to Cart</button>
+        </form>
+        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+    </div>
+</div>
+
+
+
+    </div>
+<script>
+    function storeProductId(productId) {
+        localStorage.setItem('product_id', productId);
+        window.location.href = 'buyeraddress.html'; // Redirect to buyer address page
+    }
+
+    function filterProducts() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const productContainer = document.getElementById('productContainer');
+        const products = productContainer.getElementsByClassName('product-item');
+
+        for (let i = 0; i < products.length; i++) {
+            const productName = products[i].getElementsByTagName("h3")[0].innerText;
+            products[i].style.display = productName.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+        }
+    }
+</script>
+
+<div class="product-container" id="productContainer">
+    <ul id="productList"></ul>
+</div>
+<script>
+    function storeProductId(productId) {
+        localStorage.setItem('product_id', productId);
+        window.location.href = 'buyeraddress.html'; // Redirect to buyer address page
+    }
+
+    function filterProducts() {
+        const input = document.getElementById('searchInput');
+        const filter = input.value.toLowerCase();
+        const productContainer = document.getElementById('productContainer');
+        const products = productContainer.getElementsByClassName('product-item');
+
+        for (let i = 0; i < products.length; i++) {
+            const productName = products[i].getElementsByTagName("h3")[0].innerText;
+            products[i].style.display = productName.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+        }
+    }
+</script>
+
+   <div id="productList"></div>
+
+<script>
+    function renderProducts() {
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        const productList = document.getElementById('productList');
+        productList.innerHTML = ''; // Clear the existing product list
+
+        products.forEach((product, index) => {
+            const productItem = document.createElement('div');
+            productItem.className = 'product-item';
+            productItem.innerHTML = `
+                <div class="product-content">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <h3 class="product-name">${product.name}</h3>
+                    <p class="product-price">Price: ₹${product.price}</p>
+                    <p class="product-description">${product.description}</p>
+                     <span class="favorite-icon" onclick="toggleFavorite(this)">
+                            <i class="bi bi-heart"></i>
+                        </span>
+                    <div class="button-container">
+                        <button class="button" type="button" onclick="storeProductId(${index})">Buy Now</button>
+                        <form action="cartServlet" method="POST" style="display: inline;">
+                            <input type="hidden" name="product_id" value="${index + 1}">
+                            <input type="hidden" name="product_name" value="${product.name}">
+                            <input type="hidden" name="product_price" value="${product.price}">
+                            <input type="hidden" name="product_image" value="${product.image}">
+                            <button class="button cart-button" type="submit">Add to Cart</button>
+                        </form>
+                        <button class="button review-button" onclick="window.location.href='submit-review.html';">Review</button>
+                       
+                    </div>
+                </div>
+            `;
+            productList.appendChild(productItem);
+        });
+    }
+
+    renderProducts();
+</script>
+
+</body>
+</html>

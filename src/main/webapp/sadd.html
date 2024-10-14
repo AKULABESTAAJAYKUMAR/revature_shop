@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List - Revature Shop</title>
+    
+    <style>
+        body, h1, h3, p {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            text-align: center; 
+            background-color: #f7f9fc; 
+            padding: 20px; 
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: #333; 
+        }
+
+        .search-container {
+            margin-bottom: 20px; 
+        }
+
+        .search-bar {
+            padding: 10px;
+            font-size: 16px;
+            width: 250px; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center; 
+        }
+
+        #productList {
+            display: flex; /* Use flexbox for the list */
+            flex-wrap: wrap; /* Allow wrapping */
+            justify-content: center; /* Center items */
+            padding: 0; /* Remove default padding */
+            list-style-type: none; /* Remove bullets from list */
+        }
+
+        .product-item {
+            border: 1px solid #ddd; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin: 15px; 
+            width: 220px; 
+            text-align: center;
+            background-color: #fff; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            transition: transform 0.2s; 
+        }
+
+        .product-item:hover {
+            transform: scale(1.03); 
+        }
+
+        .product-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px; 
+        }
+
+        .product-item h3 {
+            font-size: 18px;
+            color: #333; 
+            margin: 10px 0; 
+        }
+
+        .product-item p {
+            color: #555; 
+            margin: 5px 0; 
+        }
+
+        .button {
+            padding: 10px 20px; 
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #007BFF; 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s; 
+        }
+
+        .button:hover {
+            background-color: #0056b3; 
+        }
+
+        .cart-button {
+            background-color: #28a745; 
+        }
+
+        .cart-button:hover {
+            background-color: #218838; 
+        }
+
+        .hidden {
+            display: none; 
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome To Revature Shop</h1>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search for products..." onkeyup="filterProducts()">
+    </div>
+    
+    <div class="product-container" id="productContainer">
+        <ul id="productList"></ul>
+    </div>
+
+    <script>
+        // Load existing products from localStorage
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+
+        // Function to render the product list
+        function renderProducts() {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = ''; // Clear existing list
+            products.forEach((product) => {
+                const productItem = document.createElement('li');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Price: ₹${product.price}</p>
+                    <button class="button" type="button" onclick="storeProductId(${product.id})">Buy Now</button>
+                    <form action="cartServlet" method="POST">
+                        <input type="hidden" name="product_id" value="${product.id}">
+                        <input type="hidden" name="product_name" value="${product.name}">
+                        <input type="hidden" name="product_price" value="${product.price}">
+                        <input type="hidden" name="product_image" value="${product.image}">
+                        <button class="button cart-button" type="submit">Add to Cart</button>
+                    </form>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Initial render of products
+        renderProducts();
+
+        // Filter products based on search input
+        function filterProducts() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
+            const productList = document.getElementById('productList');
+            productList.innerHTML = ''; // Clear existing list
+            filteredProducts.forEach((product) => {
+                const productItem = document.createElement('li');
+                productItem.className = 'product-item';
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Price: ₹${product.price}</p>
+                    <button class="button" type="button" onclick="storeProductId(${product.id})">Buy Now</button>
+                    <form action="cartServlet" method="POST">
+                        <input type="hidden" name="product_id" value="${product.id}">
+                        <input type="hidden" name="product_name" value="${product.name}">
+                        <input type="hidden" name="product_price" value="${product.price}">
+                        <input type="hidden" name="product_image" value="${product.image}">
+                          <input type="hidden" name="productDescription" value="${product.description}">
+
+                        <button class="button cart-button" type="submit">Add to Cart</button>
+                    </form>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        // Placeholder for storeProductId function
+        function storeProductId(id) {
+            // Implement storing the product ID for further processing
+            console.log(`Product ID ${id} selected for purchase.`);
+        }
+    </script>
+</body>
+</html>
